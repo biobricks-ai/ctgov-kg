@@ -1,35 +1,42 @@
-# How to build bricks
+# ctgov-kg
 
-1. Create a brick named `{newbrick}` from this template
-```
-gh repo create biobricks-ai/{newbrick} -p biobricks-ai/brick-template --public
-gh repo clone biobricks-ai/{newbrick}
-cd newbrick
-```
+## Requirements
 
-2. Edit stages according to your needs:
-    Recommended scripts:
-    - ``01_download.sh``
-    - ``02_unzip.sh``
-    - ``03_build.sh`` calling a function to process individual files like ``csv2parquet.R`` or ``csv2parquet.py``
+1. Docker (`docker`)
+2. DVC (`dvc`)
+3. PostgreSQL client (`psql`)
+4. DuckDB client (`duckdb`)
 
-3. Replace stages in dvc.yaml with your new stages
-    
-4. Build your brick
-```
-dvc repro # runs new stages
+## Build local database
+
+1. Copy `.env.template` to `.env` and edit (note the `DOCKER_POSTGRES_DATA_DIR` variable).
+
+2. Run the following to download the data:
+
+```shell
+dvc pull # or dvc repro
 ```
 
-5. Push the data to biobricks.ai
-```
-dvc push -r s3.biobricks.ai 
+3. Start the PostgreSQL server and restore the database dumps.
+
+```shell
+make docker-compose-up docker-load-data
 ```
 
-6. Commit the brick
-```
-git add -A && git commit -m "some message"
-git push
+## SQL
+
+```shell
+
+make run-duckdb FILE=sql/mesh-coverage.duckdb.sql
+
 ```
 
-7. Monitor the bricktools github action
+---
 
+
+```shell
+
+# NOTE: `vd` is VisiData
+make run-duckdb-csv FILE=sql/search-string-intervention.duckdb.sql | vd -f csv
+
+```

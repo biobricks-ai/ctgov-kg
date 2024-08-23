@@ -1,0 +1,21 @@
+#!/bin/sh
+
+## Requires: psql
+
+set -eu
+
+BIN_REQUIRES='
+	dirname
+	psql
+'
+
+CURDIR=`dirname "$0"`
+
+if [ -f "$CURDIR/../.env" ]; then
+	. "$CURDIR/../.env"
+else
+	echo "Need to create .env from .env.template" >&2;
+	exit 1
+fi
+
+exec psql "$@"

@@ -1,3 +1,5 @@
+.env
+/work
 logs
 /download
 /list

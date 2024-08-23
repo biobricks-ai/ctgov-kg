@@ -1,2 +1,14 @@
 schema: '2.0'
-stages: {}
+stages:
+  download-20240430:
+    cmd: stages/01_download_db_20240430.sh
+    deps:
+    - path: stages/01_download_db_20240430.sh
+      hash: md5
+      md5: 0f380d067cb2eeab31c97253811e9fb5
+      size: 412
+    outs:
+    - path: download/aact/db-dump/20240430_clinical_trials.zip
+      hash: md5
+      md5: dd7dd067786f58bbd6cd43758fc1a3da
+      size: 1831128430

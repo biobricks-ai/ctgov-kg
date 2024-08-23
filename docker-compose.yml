@@ -1,0 +1,27 @@
+# Environment variables:
+#
+# DOCKER_POSTGRES_DATA_DIR : directory for persistence of Postgres data
+#
+# PGPORT                   : Postgres port
+# PGPASSWORD               : Postgres password
+services:
+  aact-db:
+    image: biobricks.ai/ctgov-kg/clinicaltrials-aact-db:latest
+    build:
+      dockerfile: Dockerfile
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    volumes:
+      - ./download/aact/db-dump:/aact-data
+      - ${DOCKER_POSTGRES_DATA_DIR:-./work/aact/postgres/data}:/var/lib/postgresql/data
+      - ./script:/script
+      # or set shared memory limit when deploy via swarm stack
+      #- type: tmpfs
+      #  target: /dev/shm
+      #  tmpfs:
+      #    size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD:-password}
+    ports:
+      - "${PGPORT:-5432}:5432"

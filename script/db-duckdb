@@ -1,0 +1,25 @@
+#!/bin/sh
+
+## Requires: duckdb
+
+set -eu
+
+BIN_REQUIRES='
+	dirname
+	duckdb
+'
+
+CURDIR=`dirname "$0"`
+
+if [ -f "$CURDIR/../.env" ]; then
+	. "$CURDIR/../.env"
+else
+	echo "Need to create .env from .env.template" >&2;
+	exit 1
+fi
+
+DUCKDB_SQL_ATTACH_PG="ATTACH '' AS pg (TYPE postgres);"
+
+exec duckdb \
+	-cmd "$DUCKDB_SQL_ATTACH_PG" \
+	"$@"

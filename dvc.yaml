@@ -9,9 +9,9 @@
 # dvc repro <stage>
 
 stages:
-  download-20240430:
-    cmd: stages/01_download_db_20240430.sh
+  download-aact-db-dump:
+    cmd: stages/01_download_aact_db_dump.sh
     deps:
-      - stages/01_download_db_20240430.sh
+      - stages/01_download_aact_db_dump.sh
     outs:
-      - download/aact/db-dump/20240430_clinical_trials.zip
+      - download/aact/db-dump
